@@ -1,0 +1,38 @@
+clc;
+clear all;
+clf;
+M = 4; % Number of QPSK symbols
+t = [0:0.01:4.4 * %pi];
+A = 5;
+wc = 5;
+Vm = A * squarewave(t);
+Vc = A * cos(wc * t);
+fc = wc / (2 * %pi);
+subplot(3, 1, 1);
+plot(t, Vm, 'red');
+xlabel("Time");
+ylabel("Amplitude of Message Signal");
+subplot(3, 1, 2);
+plot(t, Vc, 'green');
+xlabel("Time");
+ylabel("Amplitude of Carrier Signal");
+
+% Generate QPSK signal
+symbols = [1 + 1i, -1 + 1i, -1 - 1i, 1 - 1i];
+fs = 100; % Sampling frequency
+Ts = 1 / fs; % Sampling period
+t_qpsk = 0:Ts:(length(t) - 1) * Ts;
+QPSK_signal = [];
+for i = 1:length(t_qpsk)
+    symbol_index = ceil(M * rand());
+    symbol = symbols(symbol_index);
+    QPSK_signal = [QPSK_signal, symbol];
+end
+
+% Display QPSK constellation diagram
+subplot(3, 1, 3);
+scatter(real(QPSK_signal), imag(QPSK_signal), 'blue');
+xlabel("In-Phase");
+ylabel("Quadrature");
+title('QPSK Constellation Diagram');
+
